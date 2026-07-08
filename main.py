@@ -8,6 +8,7 @@ if api_key == None :
 
 from openai import OpenAI
 
+prompt = "Why is Boot.dev such a great place to learn backend development? Use one paragraph maximum."
 client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
     api_key=api_key,
@@ -16,7 +17,7 @@ client = OpenAI(
 completion = client.chat.completions.create(
   model="openrouter/free",
   messages=[
-    {"role": "user", "content": "Why is Boot.dev such a great place to learn backend development? Use one paragraph maximum."},
+    {"role": "user", "content": prompt},
   ]
   
 )
@@ -25,7 +26,7 @@ completion = client.chat.completions.create(
 
 if completion.usage == None :
     raise RuntimeError("no completion")
-print("User prompt: ")
+print("User prompt: " + prompt)
 print("Prompt tokens: "+ str(completion.usage.prompt_tokens))
 print("Response tokens: "+ str(completion.usage.completion_tokens))
 print("Response: "+ completion.choices[0].message.content)
