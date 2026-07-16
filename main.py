@@ -1,4 +1,5 @@
 import os
+import argparse
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -8,27 +9,33 @@ if api_key == None :
 
 from openai import OpenAI
 
-prompt = "Why is Boot.dev such a great place to learn backend development? Use one paragraph maximum."
 client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
     api_key=api_key,
 )
 
+parser = argparse.ArgumentParser(description="Chatbot")
+parser.add_argument("user_prompt", type=str, help="User prompt")
+parser.add_argument("--verbose", action="store_true", help="Enable verbose output")
+args = parser.parse_args()
+
+messages = [
+    {"role": "user", "content": args.user_prompt},
+]
+
 completion = client.chat.completions.create(
   model="openrouter/free",
-  messages=[
-    {"role": "user", "content": prompt},
-  ]
-  
+  messages=messages
 )
 
 
 
 if completion.usage == None :
     raise RuntimeError("no completion")
-print("User prompt: " + prompt)
-print("Prompt tokens: "+ str(completion.usage.prompt_tokens))
-print("Response tokens: "+ str(completion.usage.completion_tokens))
+if args.verbose :
+    print("User prompt: " + args.user_prompt)
+    print("Prompt tokens: "+ str(completion.usage.prompt_tokens))
+    print("Response tokens: "+ str(completion.usage.completion_tokens))
 print("Response: "+ completion.choices[0].message.content)
 
 
@@ -37,7 +44,7 @@ print("Response: "+ completion.choices[0].message.content)
 
 
 def main():
-    print("Hello from ai-agent!")
+    
 
 
 if __name__ == "__main__":
