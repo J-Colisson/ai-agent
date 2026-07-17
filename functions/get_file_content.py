@@ -1,5 +1,22 @@
 import os
 
+schema_get_file_content = {
+    "type": "function",
+    "function": {
+        "name": "get_file_content",
+        "description": "Give the content of a file in a specified directory relative to the working directory, providing file size and directory status",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "file_path": {
+                    "type": "string",
+                    "description": "File path to get the content of the file, relative to the working directory",
+                },
+            },
+        },
+    },
+}
+
 def get_file_content(working_directory: str, file_path: str) -> str:
     work_dir = os.path.abspath(working_directory)
     target_file = os.path.normpath(os.path.join(work_dir, file_path))
